@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>pluscopter</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      var socket = io.connect('http://localhost:1337');
+
+      var drone = {
+        takeOff: function(){
+          socket.emit('drone', {action: 'takeoff'});
+        }, 
+        land: function(){
+          socket.emit('drone', {action: 'land'});
+        }
+      }
+    </script>
+
+    <script src="/dronestream/nodecopter-client.js"></script>
+    <script>
+    // video canvas will auto-size to the DOM-node, or default to 640*360 if no size is set.
+      new NodecopterStream(document.getElementById("droneStream"));
+    </script>
+  </head>
+  <body>
+    <div id="droneStream"></div>
+    <div id="controls"><a onClick="drone.takeOff()">takeoff</a><br><a onClick="drone.land()">land</a></dvi>
+    </div>
+  </body>
+</html>
