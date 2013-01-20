@@ -4,6 +4,7 @@ var server = require('http').createServer(handler)
   , arDrone = require('ar-drone')
   , dronestream = require("dronestream");
 
+io.set('log level', 0)
 var droneClient  = arDrone.createClient();
 
 server.listen(1337);
