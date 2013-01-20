@@ -2,26 +2,124 @@
   <head>
     <title>pluscopter</title>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="jquery.min.js"></script>
     <script type="text/javascript">
       var socket = io.connect('http://localhost:1337');
 
       var drone = {
-        takeOff: function(){
+        takeoff: function(){
           socket.emit('drone', {action: 'takeoff'});
-        }, 
-        land: function(){
+        }, stop: function(){
+          socket.emit('drone', {action: 'stop'});
+        }, land: function(){
           socket.emit('drone', {action: 'land'});
+        }, up: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'up', args: [speed]});
+        }, down: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'down', args: [speed]});
+        }, front: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'front', args: [speed]});
+        }, back: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'back', args: [speed]});
+        }, left: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'left', args: [speed]});
+        }, right: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'right', args: [speed]});
+        }, clockwise: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'clockwise', args: [speed]});
+        }, counterClockwise: function(speed){
+          speed = tools.getSpeed(speed);
+          socket.emit('drone', {action: 'counterClockwise', args: [speed]});
+        }, animate: function(animation, duration){
+          if(animation){
+            if(!duration){
+              duration = 15;
+            }
+            socket.emit('drone', {action: 'animate', args: [animation, duration]});
+          }
+        }, emergency: function(){
+           socket.emit('drone', {action: 'emergency'});
+        }, disableEmergency: function(){
+           socket.emit('drone', {action: 'disableEmergency'});
+        }, flipLeft: function(){
+          this.animate('flipLeft', 15)
+        }, flipRight: function(){
+          this.animate('flipRight', 15)
+        }
+      }
+
+      var tools = {
+        speed: 0.3,
+        duration: 15,
+        setSpeed: function(speed){
+          this.speed = speed;
+        },
+        getSpeed: function(speed){
+          if(!speed){
+            speed = this.speed;
+          }
+
+          return speed;
+        },
+        setDuration: function(duration){
+          this.duration = duration;
+        },
+        getDuration: function(duration){
+          if(!duration){
+            duration = this.duration;
+          }
+
+          return duration;
         }
       }
     </script>
 
     <script src="/dronestream/nodecopter-client.js"></script>
     <script>
-    // video canvas will auto-size to the DOM-node, or default to 640*360 if no size is set.
-      new NodecopterStream(document.getElementById("droneStream"));
+      function init(){
+        // video canvas will auto-size to the DOM-node, or default to 640*360 if no size is set.
+        //new NodecopterStream(document.getElementById("droneStream"));
+
+        $('body').keydown(function(event) {
+
+          // Didn't use a mapper because of better configurability
+          if(event.which == 87){
+            drone.front();
+          } else if(event.which == 83){
+            drone.back();
+          } else if(event.which == 65){
+            drone.left();
+          } else if(event.which == 68){
+            drone.right();
+          } else if(event.which == 37){
+            drone.counterClockwise();
+          } else if(event.which == 39){
+            drone.clockwise();
+          } else if(event.which == 38){
+            drone.up();
+          } else if(event.which == 40){
+            drone.down()
+          } else if(event.which == 13){
+            drone.takeoff();
+          } else if(event.which == 27){
+            drone.land();
+          } else if(event.which == 32){
+            drone.stop();
+          } else if(event.which == 8){
+            drone.disableEmergency();
+          }
+        })
+      }
     </script>
   </head>
-  <body>
+  <body onload="init()">
     <div id="droneStream"></div>
     <div id="controls"><a onClick="drone.takeOff()">takeoff</a><br><a onClick="drone.land()">land</a></dvi>
     </div>
