@@ -49,9 +49,15 @@
           this.exec('right', [speed]);
         }, clockwise: function(speed){
           speed = tools.getSpeed(speed);
+          if(speed < 0.3 && speed != 0){
+            speed = 0.3;
+          }
           this.exec('clockwise', [speed]);
         }, counterClockwise: function(speed){
           speed = tools.getSpeed(speed);
+          if(speed < 0.3 && speed != 0){
+            speed = 0.3;
+          }
           this.exec('counterClockwise', [speed]);
         }, animate: function(animation, duration){
           if(animation){
