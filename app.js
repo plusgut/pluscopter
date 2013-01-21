@@ -1,3 +1,5 @@
+#!/usr/bin/env nodejs
+
 var server = require('http').createServer(handler)
   , io = require('socket.io').listen(server)
   , fs = require('fs')
