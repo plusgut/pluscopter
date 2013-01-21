@@ -39,7 +39,11 @@ io.sockets.on('connection', function (socket) {
       console.log(data.action)
       console.log(data.args)
 
-      droneClient[data.action](data.args[0], data.args[1]);
+      try{
+        droneClient[data.action](data.args[0], data.args[1]);
+      } catch(err){
+        console.log(err);
+      }
     }
   });
 });

@@ -6,48 +6,62 @@
     <script type="text/javascript">
       var socket = io.connect('http://localhost:1337');
 
+      Array.prototype.contains = function(obj) {
+        var i = this.length;
+        while (i--) {
+          if (this[i] === obj) {
+              return true;
+          }
+        }
+        return false;
+      }
+
       var drone = {
-        takeoff: function(){
-          socket.emit('drone', {action: 'takeoff'});
+        action: '',
+        exec: function(action, args){
+          console.log(action, args)
+          this.action = action;
+          socket.emit('drone', {action: action, args: args});
+        }, takeoff: function(){
+          this.exec('taleoff')
         }, stop: function(){
-          socket.emit('drone', {action: 'stop'});
+          this.exec('stop')
         }, land: function(){
-          socket.emit('drone', {action: 'land'});
+          this.exec('land')
         }, up: function(speed){
           speed = tools.getSpeed(speed);
-          socket.emit('drone', {action: 'up', args: [speed]});
+          this.exec('up', speed);
         }, down: function(speed){
           speed = tools.getSpeed(speed);
-          socket.emit('drone', {action: 'down', args: [speed]});
+          this.exec('down', [speed]);
         }, front: function(speed){
           speed = tools.getSpeed(speed);
-          socket.emit('drone', {action: 'front', args: [speed]});
+          this.exec('front', [speed]);
         }, back: function(speed){
           speed = tools.getSpeed(speed);
-          socket.emit('drone', {action: 'back', args: [speed]});
+          this.exec('back', [speed]);
         }, left: function(speed){
           speed = tools.getSpeed(speed);
+          this.exec('left', [speed])
           socket.emit('drone', {action: 'left', args: [speed]});
         }, right: function(speed){
           speed = tools.getSpeed(speed);
-          socket.emit('drone', {action: 'right', args: [speed]});
+          this.exec('right', [speed]);
         }, clockwise: function(speed){
           speed = tools.getSpeed(speed);
-          socket.emit('drone', {action: 'clockwise', args: [speed]});
+          this.exec('clockwise', [speed]);
         }, counterClockwise: function(speed){
           speed = tools.getSpeed(speed);
-          socket.emit('drone', {action: 'counterClockwise', args: [speed]});
+          this.exec('counterClockwise', [speed]);
         }, animate: function(animation, duration){
           if(animation){
             if(!duration){
               duration = 15;
             }
-            socket.emit('drone', {action: 'animate', args: [animation, duration]});
+            this.exec('animate', [animation, duration])
           }
-        }, emergency: function(){
-           socket.emit('drone', {action: 'emergency'});
         }, disableEmergency: function(){
-           socket.emit('drone', {action: 'disableEmergency'});
+          this.exec('disableEmergency');
         }, flipLeft: function(){
           this.animate('flipLeft', 15)
         }, flipRight: function(){
@@ -56,27 +70,41 @@
       }
 
       var tools = {
-        speed: 0.3,
+        speed: 0.1,
         duration: 15,
-        setSpeed: function(speed){
+        increaseSpeed: function(){
+          var speed = this.speed + 0.1;
+          if(speed > 1){
+            speed = 1;
+          }
+          this.setSpeed(speed);
+        }, decreaseSpeed: function(){
+          var speed = this.speed - 0.1;
+          if(speed < 0){
+            speed = 0;
+          }
+          this.setSpeed(speed);
+        }, setSpeed: function(speed){
           this.speed = speed;
-        },
-        getSpeed: function(speed){
+          this.updateSpeed();
+        }, getSpeed: function(speed){
           if(!speed){
             speed = this.speed;
           }
-
           return speed;
-        },
-        setDuration: function(duration){
+        }, setDuration: function(duration){
           this.duration = duration;
-        },
-        getDuration: function(duration){
+        }, getDuration: function(duration){
           if(!duration){
             duration = this.duration;
           }
 
           return duration;
+        }, updateSpeed: function(){
+          var speedObjects = ['front', 'back', 'left', 'right', 'up', 'down', 'clockwise', 'counterClockwise'];
+          if(speedObjects.contains(drone.action)){
+            drone[drone.action]();
+          }
         }
       }
     </script>
@@ -88,7 +116,6 @@
         //new NodecopterStream(document.getElementById("droneStream"));
 
         $('body').keydown(function(event) {
-
           // Didn't use a mapper because of better configurability
           if(event.which == 87){
             drone.front();
@@ -99,9 +126,17 @@
           } else if(event.which == 68){
             drone.right();
           } else if(event.which == 37){
-            drone.counterClockwise();
+            var speed = tools.getSpeed();
+            if(speed < 0.3){
+              speed = 0.3;
+            }
+            drone.counterClockwise(speed);
           } else if(event.which == 39){
-            drone.clockwise();
+            var speed = tools.getSpeed();
+            if(speed < 0.3){
+              speed = 0.3;
+            }
+            drone.clockwise(speed);
           } else if(event.which == 38){
             drone.up();
           } else if(event.which == 40){
@@ -114,6 +149,10 @@
             drone.stop();
           } else if(event.which == 8){
             drone.disableEmergency();
+          } else if(event.which == 33){
+            tools.increaseSpeed();
+          } else if(event.which == 34){
+            tools.decreaseSpeed();
           }
         })
       }
