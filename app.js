@@ -140,9 +140,9 @@ var joy = {
   exec: function(){
     this.updateMode();
     if(joy.x > joy.y){
-      console.log(joy.x + ' ' + joy.typeX)
+      console.log(joy.typeX + '\t' + joy.x)
     } else if(joy.y > joy.x){
-      console.log(joy.y + ' ' + joy.typeY)
+      console.log(joy.typeY + '\t' + joy.y)
     } else if(joy.y == 0 && joy.x == 0){
       console.log('stop')
     } else{
