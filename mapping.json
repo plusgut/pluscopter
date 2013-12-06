@@ -13,11 +13,47 @@
 		"negative": "left"
 	},{
 		"number": 3,
-		"positive": "front",
-		"negative": "back"
+		"positive": "back",
+		"negative": "front"
 	}],
 	"buttons": [{
+		"number": 0,
+		"action": "animate",
+		"payload": "flipAhead"
+	},{
+		"number": 1,
+		"action": "animate",
+		"payload": "flipBehind"
+	},{
+		"number": 2,
+		"action": "animate",
+		"payload": "flipLeft"
+	},{
+		"number": 3,
+		"action": "animate",
+		"payload": "flipRight"
+	},{
 		"number": 4,
 		"action": "toggleStart"
+	},{
+		"number": 5,
+		"action": "exec",
+		"payload": "stop"
+	},{
+		"number": 7,
+		"action": "exec",
+		"payload": "calibrate"
+	},{
+		"number": 8,
+		"action": "animate",
+		"payload": "flipLeft"
+	},{
+		"number": 9,
+		"action": "animate",
+		"payload": "flipRight"
+	},{
+		"number": 11,
+		"action": "exec",
+		"payload": "disableEmergency"
 	}]
 }
