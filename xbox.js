@@ -25,7 +25,7 @@ var joy = {
 			action = map.negative;
 		}
 
-		speed = joy.grade(evt.value);
+		speed = this.grade(evt.value);
 		this.execute(action, speed);
 	},
 	handleButton: function(evt) {
@@ -85,7 +85,6 @@ var joy = {
 		return value / 35000;
 	}
 };
-
 
 stick.on('button', joy.handleButton);
 stick.on('axis', joy.handleStick);

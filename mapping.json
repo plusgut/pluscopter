@@ -46,11 +46,11 @@
 	},{
 		"number": 8,
 		"action": "animate",
-		"payload": "flipLeft"
+		"payload": "vzDance"
 	},{
 		"number": 9,
 		"action": "animate",
-		"payload": "flipRight"
+		"payload": "wave"
 	},{
 		"number": 11,
 		"action": "exec",
