@@ -1,0 +1,23 @@
+{
+	"axis": [{
+		"number": 0,
+		"positive": "clockwise",
+		"negative": "counterClockwise"
+	},{
+		"number": 1,
+		"positive": "down",
+		"negative": "up"
+	},{
+		"number": 2,
+		"positive": "right",
+		"negative": "left"
+	},{
+		"number": 3,
+		"positive": "front",
+		"negative": "back"
+	}],
+	"buttons": [{
+		"number": 4,
+		"action": "toggleStart"
+	}]
+}
