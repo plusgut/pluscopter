@@ -1,13 +1,13 @@
 #!/usr/bin/env nodejs
 
-var server = require('http').createServer(handler)
-  , io = require('socket.io').listen(server)
-  , fs = require('fs')
-  , arDrone = require('ar-drone')
+var server = require('http').createServer(handler),
+  io = require('socket.io').listen(server),
+  fs = require('fs'),
+  arDrone = require('ar-drone'),
 //  , dronestream = require('dronestream')
-  , Joystick = require('joystick');
+  Joystick = require('joystick');
 
-io.set('log level', 0)
+io.set('log level', 0);
 var droneClient  = arDrone.createClient();
 var joystick = new Joystick(0, 3500, 350);
 
@@ -40,8 +40,8 @@ io.sockets.on('connection', function (socket) {
       data.args = [];
     }
     if(data.action && droneClient[data.action]){
-      console.log(data.action)
-      console.log(data.args)
+      console.log(data.action);
+      console.log(data.args);
 
       try{
         droneClient[data.action](data.args[0], data.args[1]);
@@ -55,19 +55,19 @@ io.sockets.on('connection', function (socket) {
 joystick.on('button', function(evt, foo){
   var pressed = false;
   if(evt.value == 1){
-    pressed = true
+    pressed = true;
   }
 
-  if(evt.number == 0){
+  if(evt.number === 0) {
     joy.secondary = pressed;
     joy.exec();
   } else if(evt.number == 1 && evt.value){
     if(joy.started){
       joy.started = false;
-      console.log('land')
+      console.log('land');
     } else {
       joy.started = true;
-      console.log('start')
+      console.log('start');
     }
   }
 
@@ -76,22 +76,22 @@ joystick.on('button', function(evt, foo){
 joystick.on('axis', function(evt){
   var secondary = joy.secondary;
   if(evt.number == 1){
-    joy.x = joy.grade(evt.value)
+    joy.x = joy.grade(evt.value);
     if(evt.value > 0){
       joy.typeX = 'back';
     } else if(evt.value < 0){
-      joy.typeX = 'front'
-    } else if(evt.value == 0){
-      joy.typeX = 'stop'
+      joy.typeX = 'front';
+    } else if(evt.value === 0){
+      joy.typeX = 'stop';
     }
   } else if(evt.number == 2){
-    joy.y = joy.grade(evt.value)
+    joy.y = joy.grade(evt.value);
     if(evt.value > 0){
       joy.typeY = 'right';
     } else if(evt.value < 0){
-      joy.typeY = 'left'
-    } else if(evt.value == 0){
-      joy.typeY = 'stop'
+      joy.typeY = 'left';
+    } else if(evt.value === 0){
+      joy.typeY = 'stop';
     }
   }
 
@@ -108,20 +108,20 @@ var joy = {
       value = value * -1;
     }
 
-    return percentage = value / 35000;
+    return value / 35000;
   },
   updateMode: function(){
     if(this.secondary){
       if(this.typeX == 'front'){
         this.typeX = 'up';
       } else if(this.typeX == 'back'){
-        this.typeX = 'down'
+        this.typeX = 'down';
       }
 
       if(this.typeY == 'right'){
-        this.typeY = 'clockwise'
+        this.typeY = 'clockwise';
       } else if(this.typeY == 'left'){
-        this.typeY = 'counterClockwise'
+        this.typeY = 'counterClockwise';
       }
     } else{
       if(this.typeX == 'up'){
@@ -131,7 +131,7 @@ var joy = {
       }
 
       if(this.typeY == 'clockwise'){
-        this.typeY = 'right'
+        this.typeY = 'right';
       } else if(this.typeY == 'counterClockwise'){
         this.typeY = 'left';
       }
@@ -140,14 +140,13 @@ var joy = {
   exec: function(){
     this.updateMode();
     if(joy.x > joy.y){
-      console.log(joy.typeX + '\t' + joy.x)
+      console.log(joy.typeX + '\t' + joy.x);
     } else if(joy.y > joy.x){
-      console.log(joy.typeY + '\t' + joy.y)
-    } else if(joy.y == 0 && joy.x == 0){
-      console.log('stop')
-    } else{
-      console.log('please choose something..')
+      console.log(joy.typeY + '\t' + joy.y);
+    } else if(joy.y === 0 && joy.x === 0){
+      console.log('stop');
+    } else {
+      console.log('please choose something..');
     }
   }
-
-}
+};
