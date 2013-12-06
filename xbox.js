@@ -1,7 +1,7 @@
 #!/usr/bin/env nodejs
-var arDrone  = require('ar-drone');
-var Joystick = require('joystick');
-var mapping  = require('./mapping.json');
+var arDrone      = require('ar-drone');
+var Joystick     = require('joystick');
+var mapping      = require('./mapping.json');
 
 var stick        = new Joystick(0, 3500, 350);
 var droneClient  = arDrone.createClient();
@@ -24,7 +24,6 @@ var joy = {
 		} else if(evt.value < 0){
 			action = map.negative;
 		}
-
 		speed = this.grade(evt.value);
 		this.execute(action, speed);
 	},
@@ -41,7 +40,6 @@ var joy = {
 			var single = scope[i];
 			if(evt.number === single.number) {
 				found = true;
-
 				if(type == 'axis') {
 					this.executeMove(evt, single);
 				} else if(this[single.action]) {
@@ -54,7 +52,6 @@ var joy = {
 				}
 			}
 		}
-
 		if(!found) {
 			console.log(evt.number);
 		}
@@ -65,7 +62,6 @@ var joy = {
 		} else {
 			this.execute('takeoff');
 		}
-
 		this.started = !this.started;
 	},
 	exec: function(evt, type) {
@@ -81,7 +77,6 @@ var joy = {
 		if(value < 0){
 			value = value * -1;
 		}
-
 		return value / 35000;
 	}
 };
