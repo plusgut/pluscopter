@@ -3,8 +3,6 @@ var arDrone      = require('ar-drone');
 var Joystick     = require('joystick');
 var mapping      = require('./mapping.json');
 
-var droneClient  = arDrone.createClient();
-
 var joy = {
 	started: false,
 	duration: 1000,
@@ -79,6 +77,7 @@ var joy = {
 	}
 };
 
+var droneClient  = arDrone.createClient();
 var stick        = new Joystick(0, joy.precision, 350);
 stick.on('button', joy.handleButton);
 stick.on('axis', joy.handleStick);
