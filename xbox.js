@@ -3,12 +3,12 @@ var arDrone      = require('ar-drone');
 var Joystick     = require('joystick');
 var mapping      = require('./mapping.json');
 
-var stick        = new Joystick(0, 3500, 350);
 var droneClient  = arDrone.createClient();
 
 var joy = {
 	started: false,
 	duration: 1000,
+	precision: 3500,
 	execute: function(action, payload, extra) {
 		console.log(action, payload);
 		try{
@@ -76,12 +76,10 @@ var joy = {
 		this.execute('calibrate', 0);
 	},
 	grade: function(value){
-		if(value < 0){
-			value = value * -1;
-		}
-		return value / 35000;
+		return Math.abs(value) / this.precision;
 	}
 };
 
+var stick        = new Joystick(0, joy.precision, 350);
 stick.on('button', joy.handleButton);
 stick.on('axis', joy.handleStick);
