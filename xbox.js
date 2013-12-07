@@ -45,7 +45,6 @@ var joy = {
 				if(type == 'axis') {
 					this.executeMove(evt, single);
 				} else if(this[single.action]) {
-					
 					if(evt.value === 1) {
 						this[single.action](evt, single.payload);
 					}
