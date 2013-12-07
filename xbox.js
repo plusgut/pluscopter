@@ -19,10 +19,12 @@ var joy = {
 	},
 	executeMove: function(evt, map) {
 		var action = null;
-		if(evt.value >= 0) {
+		if(evt.value > 0) {
 			action = map.positive;
 		} else if(evt.value < 0){
 			action = map.negative;
+		} else if(evt.value === 0) {
+			action = 'stop';
 		}
 		speed = this.grade(evt.value);
 		this.execute(action, speed);
